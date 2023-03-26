@@ -81,7 +81,7 @@ SetVehicleManualGears = function(vehicle,dyno,auto,eco)
 	manual = true
 	local turbopower = 1.0
 	local calculate_horsepower = function(rpm)
-		local power = ((((fInitialDriveMaxFlatVel * 3.6) * fInitialDriveForce * turbopower) * (rpm / 10000)) * (gear / maxgear))
+		local power = ((((fInitialDriveMaxFlatVel * 2.236936) * fInitialDriveForce * turbopower) * (rpm / 10000)) * (gear / maxgear))
 		local torque = ((power * 5252) / rpm)
 		local horsepower = power * (rpm / 10000)
 		return horsepower, torque
@@ -183,7 +183,7 @@ SetVehicleManualGears = function(vehicle,dyno,auto,eco)
 			ent:set('startdyno',{ts = GetGameTimer(), platform = zoffset, dyno = true, inertia = default_fDriveInertia}, true)
 		else
 			gear_ratio = vehicle_gear_ratio[maxgear][1] * (1/0.9)
-			ent:set('gearshift',{gear = 1, gearmaxspeed = (((maxspeed * 1.32) / 3.6) / gear_ratio), flatspeed = (maxspeed / gear_ratio), driveforce = (driveforce * gear_ratio)}, true)
+			ent:set('gearshift',{gear = 1, gearmaxspeed = (((maxspeed * 1.32) / 2.236936) / gear_ratio), flatspeed = (maxspeed / gear_ratio), driveforce = (driveforce * gear_ratio)}, true)
 		end
 		local gear_clutch = nil
 		while invehicle and manual do
@@ -199,13 +199,13 @@ SetVehicleManualGears = function(vehicle,dyno,auto,eco)
 			driveforce = fInitialDriveForce
 			maxspeed = fInitialDriveMaxFlatVel
 			gear_ratio = vehicle_gear_ratio[maxgear][gear] * (1/0.9)
-			gearmaxspeed = ((maxspeed * 1.32) / 3.6) / gear_ratio
+			gearmaxspeed = ((maxspeed * 1.32) / 2.236936) / gear_ratio
 			flatspeed = maxspeed / gear_ratio
 			rpm = GetVehicleCurrentRpm(vehicle)
-			speed = GetEntitySpeed(vehicle) * 3.6
+			speed = GetEntitySpeed(vehicle) * 2.236936
 			if switching and not dyno and clutching < 0.1 then
 				gear_ratio = vehicle_gear_ratio[maxgear][gear] * (1/0.9)
-				gearmaxspeed = ((maxspeed * 1.32) / 3.6) / gear_ratio
+				gearmaxspeed = ((maxspeed * 1.32) / 2.236936) / gear_ratio
 				DisableControlAction(0,71)
 				SetVehicleCheatPowerIncrease(vehicle,1.0)
 				ForceVehicleSingleGear(vehicle,gearmaxspeed,dyno)
@@ -258,7 +258,7 @@ SetVehicleManualGears = function(vehicle,dyno,auto,eco)
 					SetVehicleHandlingInt(vehicle , "CCarHandlingData", "strAdvancedFlags", vehicleflags+0x20000+0x200+0x1000)
 				end
 			elseif not dyno and GetControlNormal(0,72) < 0.1 and gear_ratio and rpm > 0.3 and clutching < 0.1 then
-				local rpm = ((speed / 3.6) / gearmaxspeed) * 1.01
+				local rpm = ((speed / 2.236936) / gearmaxspeed) * 1.01
 				switch = false
 				SetVehicleHandlingFloat(vehicle , "CHandlingData", "fDriveInertia", 0.1+ (default_fDriveInertia / gear) * (1.0 - rpm))
 				SetVehicleHandlingFloat(vehicle , "CHandlingData", "fInitialDriveForce", (driveforce * (gear / maxgear)) * (1 - rpm))
@@ -292,7 +292,7 @@ SetVehicleManualGears = function(vehicle,dyno,auto,eco)
 				SetVehicleCheatPowerIncrease(vehicle,1.0)
 				ModifyVehicleTopSpeed(vehicle,1.0)
 				gear_ratio = vehicle_gear_ratio[maxgear][gear] * (1/0.9)
-				gearmaxspeed = ((maxspeed * 1.32) / 3.6) / gear_ratio
+				gearmaxspeed = ((maxspeed * 1.32) / 2.236936) / gear_ratio
 				ForceVehicleSingleGear(vehicle,gearmaxspeed,false)
 			elseif gear_clutch then
 				gear = gear_clutch
@@ -323,7 +323,7 @@ SetVehicleManualGears = function(vehicle,dyno,auto,eco)
 		SetVehicleHandlingFloat(vehicle , "CHandlingData", "fHandBrakeForce", fHandBrakeForce+0.0)
 		SetVehicleHighGear(vehicle,maxgear)
 		ForceVehicleGear(vehicle,0)
-		SetEntityMaxSpeed(vehicle,(maxspeed * 1.3) / 3.6)
+		SetEntityMaxSpeed(vehicle,(maxspeed * 1.3) / 2.236936)
 		SetVehicleMaxSpeed(vehicle,0.0)
 		SetVehicleCheatPowerIncrease(vehicle,GetVehicleCheatPowerIncrease(vehicle)+0.0)
 		ModifyVehicleTopSpeed(vehicle,1.01)
@@ -336,7 +336,7 @@ SetVehicleManualGears = function(vehicle,dyno,auto,eco)
 		DetachEntity(vehicle,false,false)
 		FreezeEntityPosition(vehicle,false)
 		manual = false
-		print('reset',(maxspeed * 1.3) / 3.6,maxspeed,maxgear,GetVehicleHighGear(vehicle),inertia,driveforce)
+		print('reset',(maxspeed * 1.3) / 2.236936,maxspeed,maxgear,GetVehicleHighGear(vehicle),inertia,driveforce)
 		dyno = false
 		indyno = false
 		lib.hideTextUI()
@@ -346,7 +346,7 @@ SetVehicleManualGears = function(vehicle,dyno,auto,eco)
 	if auto then -- custom automatic gears. purpose is to use Tuned Custom Gear Ratios and can use eco mode.
 		Citizen.CreateThreadNow(function()
 			while invehicle do
-				local speedratio = ((speed) / (gearmaxspeed * 3.6))
+				local speedratio = ((speed) / (gearmaxspeed * 2.236936))
 				local switchrpm = (eco and 0.6 or 0.9)
 				if rpm >= switchrpm and gear < maxgear then
 					local switchspeed = (eco and 0.65 or 0.89)
@@ -373,7 +373,7 @@ SetVehicleManualGears = function(vehicle,dyno,auto,eco)
 		if manual and gear+1 <= maxgear then
 			switching = true
 			local nextgear_ratio = vehicle_gear_ratio[maxgear][gear +1] * (1/0.9)
-			nextgearspeed = ((maxspeed * 1.32) / 3.6) / nextgear_ratio
+			nextgearspeed = ((maxspeed * 1.32) / 2.236936) / nextgear_ratio
 			gear += 1
 			wheelspeed = dyno and math.floor(gearmaxspeed * rpm) or math.floor((GetEntitySpeed(vehicle) * 4.2))
 			local new_inertia = GetGearInertia(nextgear_ratio)
@@ -403,7 +403,7 @@ SetVehicleManualGears = function(vehicle,dyno,auto,eco)
 			switching = true
 			gear -= 1
 			local nextgear_ratio = vehicle_gear_ratio[maxgear][gear > 1 and gear or 1] * (1/0.9)
-			nextgearspeed = ((maxspeed * 1.32) / 3.6) / nextgear_ratio
+			nextgearspeed = ((maxspeed * 1.32) / 2.236936) / nextgear_ratio
 			wheelspeed = dyno and math.floor(gearmaxspeed * rpm) or math.floor((GetEntitySpeed(vehicle) * 4.2))
 			local new_inertia = GetGearInertia(nextgear_ratio)
 			lastinertia = new_inertia
@@ -441,7 +441,7 @@ SetVehicleManualGears = function(vehicle,dyno,auto,eco)
 		gear = GEAR
 		clutch = false
 		local nextgear_ratio = vehicle_gear_ratio[maxgear][gear] * (1/0.9)
-		nextgearspeed = ((maxspeed * 1.32) / 3.6) / nextgear_ratio
+		nextgearspeed = ((maxspeed * 1.32) / 2.236936) / nextgear_ratio
 		if lastshift > gear then
 			SetVehicleCurrentRpm(vehicle,GetEntitySpeed(vehicle) / nextgearspeed)
 		end

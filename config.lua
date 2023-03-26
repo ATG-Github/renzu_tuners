@@ -454,6 +454,9 @@ config.radialoptions = {
 	  id = 'Upgrades',
 	  label = 'Upgrades',
 	  icon = 'wrench',
+	  coords = {
+		config.points[1].coord
+	  },
 	  onSelect = function()
 		return UpgradePackage()
 	  end
@@ -462,6 +465,9 @@ config.radialoptions = {
 	  id = 'Repair',
 	  label = 'Repair',
 	  icon = 'hammer',
+	  coords = {
+		config.repairpoints[1].coord,
+	},
 	  onSelect = function()
 		return Repair()
 	  end
@@ -470,6 +476,10 @@ config.radialoptions = {
 	  id = 'tuning',
 	  label = 'Tuning',
 	  icon = 'chart-bar',
+	  coords = {
+		config.dynopoints[1].coord,
+		config.dynopoints[2].coord
+	},
 	  onSelect = function()
 		return TuningMenu()
 	  end
@@ -478,6 +488,10 @@ config.radialoptions = {
 	  id = 'parts',
 	  label = 'Engine Parts',
 	  icon = 'cog',
+	  coords = {
+		config.points[1].coord,
+		config.repairpoints[1].coord
+	},
 	  onSelect = function()
 		return CheckVehicle(true)
 	  end
@@ -486,6 +500,10 @@ config.radialoptions = {
 		id = 'performance',
 		label = 'Performance',
 		icon = 'chart-line',
+		coords = {
+			config.points[1].coord,
+			config.repairpoints[1].coord
+		},
 		onSelect = function()
 		  return CheckPerformance(true)
 		end
@@ -494,6 +512,10 @@ config.radialoptions = {
 		id = 'seetires',
 		label = 'See Tires',
 		icon = 'car',
+		coords = {
+			config.points[1].coord,
+			config.repairpoints[1].coord
+		},
 		onSelect = function()
 		  return CheckWheels(true)
 		end
