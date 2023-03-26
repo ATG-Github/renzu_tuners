@@ -31,5 +31,3 @@ dependencies {
 	'/server:5848',
 	'/onesync',
 }
-
-data_file 'DLC_ITYP_REQUEST' 'stream/mist_dy.ytyp'
