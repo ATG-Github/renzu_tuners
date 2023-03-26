@@ -30,7 +30,6 @@ files {
 dependencies {
 	'/server:5848',
 	'/onesync',
-	'ox_lib',
 }
 
 data_file 'DLC_ITYP_REQUEST' 'stream/mist_dy.ytyp'
